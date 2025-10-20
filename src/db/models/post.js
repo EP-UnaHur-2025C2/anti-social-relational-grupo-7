@@ -10,14 +10,22 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Post.belongsTo(User);
-      Post.hasMany(PostImage);
-      Post.hasMany(Comment);
-      Post.belongsToMany(Tag, { through: "Post_Tag" });
+      Post.belongsTo(models.User);
+      Post.hasMany(models.Post_Images);
+      Post.hasMany(models.Comment);
+      Post.belongsToMany(models.Tag, { through: "Post_Tag" });
     }
   }
   Post.init({
-    description: { type: DataTypes.TEXT, allowNull: false }
+    description: { type: DataTypes.TEXT, allowNull: false },
+    userId: { 
+      type: DataTypes.INTEGER, 
+      allowNull: false,
+      references: {
+        model: 'Users',
+        key: 'id'
+      }
+    }
   }, {
     sequelize,
     modelName: 'Post',
