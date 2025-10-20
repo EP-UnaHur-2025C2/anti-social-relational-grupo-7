@@ -18,14 +18,6 @@ module.exports = (sequelize, DataTypes) => {
   }
   Post.init({
     description: { type: DataTypes.TEXT, allowNull: false },
-    userId: { 
-      type: DataTypes.INTEGER, 
-      allowNull: false,
-      references: {
-        model: 'Users',
-        key: 'id'
-      }
-    }
   }, {
     sequelize,
     modelName: 'Post',

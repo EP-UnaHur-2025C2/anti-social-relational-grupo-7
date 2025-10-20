@@ -21,6 +21,11 @@ db.sequelize.authenticate()
   .then(() => {
     console.log('Conexión a la base de datos exitosa');
     console.log('Base de datos:', db.sequelize.config.database);
+    console.log('Sincronizando modelos con la base de datos...');
+    return db.sequelize.sync({ alter: true }); 
+  })
+  .then(() => {
+    console.log('Modelos sincronizados correctamente.');
   })
   .catch(err => {
     console.error('Error conectando a la base de datos:', err);
