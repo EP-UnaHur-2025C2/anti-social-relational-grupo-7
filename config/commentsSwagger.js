@@ -1,0 +1,148 @@
+
+
+const commentsSwagger = {
+  "/api/comments": {
+    get: {
+      summary: "Obtiene todos los comentarios visibles",
+      tags: ["Comentarios"],
+      description: "Recupera una lista de todos los comentarios que están marcados como visibles y que fueron creados dentro del período de tiempo permitido.",
+      responses: {
+        200: {
+          description: "Lista de comentarios visibles.",
+          content: {
+            "application/json": {
+              schema: {
+                type: "array",
+                items: {
+                  type: "object",
+                  properties: {
+                    id: { type: "integer", example: 1 },
+                    content: { type: "string", example: "¡Qué buen post!" },
+                    visible: { type: "boolean", example: true },
+                    createdAt: { type: "string", format: "date-time" },
+                    Post: { type: "object", properties: { description: { type: "string" } } },
+                    User: { type: "object", properties: { nickName: { type: "string" } } },
+                  },
+                },
+              },
+            },
+          },
+        },
+        500: { description: "Error interno del servidor." },
+      },
+    },
+    post: {
+      summary: "Crea un nuevo comentario",
+      tags: ["Comentarios"],
+      requestBody: {
+        required: true,
+        content: {
+          "application/json": {
+            schema: {
+              type: "object",
+              required: ["content", "postId", "userId"],
+              properties: {
+                content: { type: "string", example: "Este es un comentario nuevo." },
+                postId: { type: "integer", example: 1 },
+                userId: { type: "integer", example: 1 },
+              },
+            },
+          },
+        },
+      },
+      responses: {
+        201: { description: "Comentario creado exitosamente." },
+        400: { description: "Faltan datos requeridos (content, postId, o userId)." },
+        404: { description: "Post o Usuario no encontrado." },
+        500: { description: "Error interno del servidor." },
+      },
+    },
+  },
+  "/api/comments/{id}": {
+    get: {
+      summary: "Obtiene un comentario visible por ID",
+      tags: ["Comentarios"],
+      parameters: [
+        {
+          in: "path",
+          name: "id",
+          required: true,
+          schema: { type: "integer" },
+          description: "ID del comentario a obtener.",
+        },
+      ],
+      responses: {
+        200: { description: "Detalles del comentario." },
+        404: { description: "Comentario no encontrado o no visible." },
+        500: { description: "Error interno del servidor." },
+      },
+    },
+    put: {
+      summary: "Actualiza un comentario por ID",
+      tags: ["Comentarios"],
+      parameters: [
+        {
+          in: "path",
+          name: "id",
+          required: true,
+          schema: { type: "integer" },
+          description: "ID del comentario a actualizar.",
+        },
+      ],
+      requestBody: {
+        required: true,
+        content: {
+          "application/json": {
+            schema: {
+              type: "object",
+              properties: {
+                content: { type: "string", example: "Contenido actualizado." },
+                visible: { type: "boolean", example: true },
+              },
+            },
+          },
+        },
+      },
+      responses: {
+        200: { description: "Comentario actualizado exitosamente." },
+        404: { description: "Comentario no encontrado." },
+        500: { description: "Error interno del servidor." },
+      },
+    },
+    delete: {
+      summary: "Elimina (oculta) un comentario por ID",
+      tags: ["Comentarios"],
+      description: "Realiza un 'soft delete' estableciendo el campo 'visible' del comentario a 'false'.",
+      parameters: [
+        {
+          in: "path",
+          name: "id",
+          required: true,
+          schema: { type: "integer" },
+          description: "ID del comentario a ocultar.",
+        },
+      ],
+      responses: {
+        200: {
+          description: "Comentario ocultado exitosamente.",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  message: { type: "string", example: "Comentario ocultado" },
+                },
+              },
+            },
+          },
+        },
+        404: { description: "Comentario no encontrado." },
+        500: { description: "Error interno del servidor." },
+      },
+    },
+  },
+};
+
+module.exports = commentsSwagger;
+
+

@@ -19,6 +19,11 @@
     "joi": "^18.0.1",
     "multer": "^2.0.2",
     "sequelize": "^6.37.7",
-    "sqlite3": "^5.1.7"
+    "sqlite3": "^5.1.7",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui": "^5.29.5",
+    "swagger-ui-dist": "^5.29.5",
+    "swagger-ui-express": "^5.0.1",
+    "swagger-ui-react": "^5.29.5"
   }
 }

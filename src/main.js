@@ -1,11 +1,15 @@
 require('dotenv').config();
 const express = require('express');
+const swaggerUi = require('swagger-ui-express');
+const swaggerJSDoc = require('swagger-jsdoc');
+const swaggerOptions = require('../config/swagger');
 const cors = require('cors');
 const path = require('path');
 const db = require('./db/models');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
 
 // Middlewares
 app.use(cors());
@@ -25,6 +29,9 @@ db.sequelize.authenticate()
 
 // Servir archivos estáticos (imágenes subidas)
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+const swaggerDocs = swaggerJSDoc(swaggerOptions);
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 // Rutas
 try {
@@ -44,4 +51,5 @@ app.get('/', (req, res) => {
 // Iniciar servidor
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en puerto ${PORT}`);
+  console.log("Documentación en http://localhost:3000/api-docs");
 });
