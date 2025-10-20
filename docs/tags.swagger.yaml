@@ -1,0 +1,104 @@
+/api/tags:
+  get:
+    summary: Obtiene todos los tags
+    tags: [Tags]
+    responses:
+      "200":
+        description: Lista de todos los tags.
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  id: { type: integer, example: 1 }
+                  name: { type: string, example: "Estrategias de Persistencia" }
+      "500":
+        description: Error interno del servidor.
+  post:
+    summary: Crea un nuevo tag
+    tags: [Tags]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [name]
+            properties:
+              name: { type: string, example: "Primer TP Persistencia" }
+    responses:
+      "201":
+        description: Tag creado exitosamente.
+      "400":
+        description: "Falta el 'name' o el tag ya existe."
+      "500":
+        description: Error interno del servidor.
+
+/api/tags/{id}:
+  get:
+    summary: Obtiene un tag por ID
+    tags: [Tags]
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema: { type: integer }
+        description: ID del tag a obtener.
+    responses:
+      "200":
+        description: Detalles del tag.
+      "404":
+        description: Tag no encontrado.
+      "500":
+        description: Error interno del servidor.
+  put:
+    summary: Actualiza un tag por ID
+    tags: [Tags]
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema: { type: integer }
+        description: ID del tag a actualizar.
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [name]
+            properties:
+              name: { type: string, example: "TypeScript" }
+    responses:
+      "200":
+        description: Tag actualizado exitosamente.
+      "400":
+        description: El nombre del tag ya existe.
+      "404":
+        description: Tag no encontrado.
+      "500":
+        description: Error interno del servidor.
+  delete:
+    summary: Elimina un tag por ID
+    tags: [Tags]
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema: { type: integer }
+        description: ID del tag a eliminar.
+    responses:
+      "200":
+        description: Tag eliminado exitosamente.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message: { type: string, example: Tag eliminado }
+      "404":
+        description: Tag no encontrado.
+      "500":
+        description: Error interno del servidor.

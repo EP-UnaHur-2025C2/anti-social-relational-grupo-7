@@ -1,0 +1,221 @@
+/api/posts:
+  get:
+    summary: Obtiene todos los posts
+    tags: [Posts]
+    responses:
+      "200":
+        description: Lista de todos los posts.
+      "500":
+        description: Error interno del servidor.
+  post:
+    summary: Crea un nuevo post
+    tags: [Posts]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [description, userId]
+            properties:
+              description: { type: string, example: "¡Mi primer post!" }
+              userId: { type: integer, example: 1 }
+    responses:
+      "201":
+        description: Post creado exitosamente.
+      "400":
+        description: Faltan datos requeridos (description o userId).
+      "404":
+        description: Usuario no encontrado.
+      "500":
+        description: Error interno del servidor.
+
+/api/posts/{id}:
+  get:
+    summary: Obtiene un post por ID
+    tags: [Posts]
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema: { type: integer }
+    responses:
+      "200":
+        description: Detalles del post.
+      "404":
+        description: Post no encontrado.
+      "500":
+        description: Error interno del servidor.
+  put:
+    summary: Actualiza un post por ID
+    tags: [Posts]
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema: { type: integer }
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              description: { type: string, example: "Descripción actualizada." }
+    responses:
+      "200":
+        description: Post actualizado exitosamente.
+      "404":
+        description: Post no encontrado.
+      "500":
+        description: Error interno del servidor.
+  delete:
+    summary: Elimina un post por ID
+    tags: [Posts]
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema: { type: integer }
+    responses:
+      "200":
+        description: Post eliminado.
+      "404":
+        description: Post no encontrado.
+      "500":
+        description: Error interno del servidor.
+
+/api/posts/{id}/images:
+  post:
+    summary: Agrega una URL de imagen a un post
+    tags: [Posts]
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema: { type: integer }
+        description: ID del post
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [url]
+            properties:
+              url:
+                {
+                  type: string,
+                  format: uri,
+                  example: "http://example.com/image.png",
+                }
+    responses:
+      "201":
+        description: Imagen agregada.
+      "400":
+        description: La URL es requerida.
+      "404":
+        description: Post no encontrado.
+      "500":
+        description: Error interno del servidor.
+
+/api/posts/images/{imageId}:
+  delete:
+    summary: Elimina una imagen por su ID
+    tags: [Posts]
+    parameters:
+      - in: path
+        name: imageId
+        required: true
+        schema: { type: integer }
+        description: ID de la imagen
+    responses:
+      "200":
+        description: Imagen eliminada.
+      "404":
+        description: Imagen no encontrada.
+      "500":
+        description: Error interno del servidor.
+
+/api/posts/{id}/upload-image:
+  post:
+    summary: Sube un archivo de imagen y lo asocia a un post
+    tags: [Posts]
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema: { type: integer }
+        description: ID del post
+    requestBody:
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              image:
+                type: string
+                format: binary
+                description: Archivo de imagen a subir.
+    responses:
+      "201":
+        description: Imagen subida y asociada.
+      "400":
+        description: No se subió ninguna imagen.
+      "404":
+        description: Post no encontrado.
+      "500":
+        description: Error interno del servidor.
+
+/api/posts/{id}/tags:
+  post:
+    summary: Asocia un tag a un post
+    tags: [Posts]
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema: { type: integer }
+        description: ID del post
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [tagId]
+            properties:
+              tagId: { type: integer, example: 1 }
+    responses:
+      "200":
+        description: Tag agregado al post.
+      "400":
+        description: tagId es requerido.
+      "404":
+        description: Post o Tag no encontrado.
+      "500":
+        description: Error interno del servidor.
+
+/api/posts/{id}/tags/{tagId}:
+  delete:
+    summary: Desasocia un tag de un post
+    tags: [Posts]
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema: { type: integer }
+        description: ID del post
+      - in: path
+        name: tagId
+        required: true
+        schema: { type: integer }
+        description: ID del tag
+    responses:
+      "200":
+        description: Tag eliminado del post.
+      "404":
+        description: Post o Tag no encontrado.
+      "500":
+        description: Error interno del servidor.
